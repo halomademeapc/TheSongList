@@ -34,7 +34,7 @@
 
 <div class="btn-toolbar d-flex justify-content-end flex-wrap" role="toolbar">
     <form asp-action="Index" method="get" class="input-group my-2 mr-2">
-        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="btnGroupAddon" name="query">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="btnGroupAddon" name="query" value="@query">
         <div class="input-group-append">
             <button type="submit" class="btn btn-outline-secondary" id="btnGroupAddon">
                 <i class="fas fa-search"></i>
@@ -56,13 +56,49 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => dummy.Name)
+                @if (!string.IsNullOrEmpty(orderPropertyName) && orderPropertyName != "name")
+                {
+                    <a asp-route-order="name" asp-route-direction="asc" class="text-dark"
+                       asp-route-query="@query" asp-route-page="1">@Html.DisplayNameFor(model => dummy.Name)</a>
+                }
+                else
+                {
+                    <a asp-route-order="name" asp-route-direction="@(descending ? "asc": "desc")" class="text-dark"
+                       asp-route-query="@query" asp-route-page="1">
+                        @Html.DisplayNameFor(model => dummy.Name)
+                        <i class="fas @(descending ? "fa-sort-down" : "fa-sort-up")"></i>
+                    </a>
+                }
             </th>
             <th>
-                @Html.DisplayNameFor(model => dummy.Artist)
+                @if (orderPropertyName != "artist")
+                {
+                    <a asp-route-order="artist" asp-route-direction="asc" class="text-dark"
+                       asp-route-query="@query" asp-route-page="1">@Html.DisplayNameFor(model => dummy.Artist)</a>
+                }
+                else
+                {
+                    <a asp-route-order="artist" asp-route-direction="@(descending ? "asc": "desc")" class="text-dark"
+                       asp-route-query="@query" asp-route-page="1">
+                        @Html.DisplayNameFor(model => dummy.Artist)
+                        <i class="fas @(descending ? "fa-sort-down" : "fa-sort-up")"></i>
+                    </a>
+                }
             </th>
             <th>
-                @Html.DisplayNameFor(model => dummy.Era)
+                @if (orderPropertyName != "era")
+                {
+                    <a asp-route-order="era" asp-route-direction="asc" class="text-dark"
+                       asp-route-query="@query" asp-route-page="1">@Html.DisplayNameFor(model => dummy.Era)</a>
+                }
+                else
+                {
+                    <a asp-route-order="era" asp-route-direction="@(descending ? "asc": "desc")" class="text-dark"
+                       asp-route-query="@query" asp-route-page="1">
+                        @Html.DisplayNameFor(model => dummy.Era)
+                        <i class="fas @(descending ? "fa-sort-down" : "fa-sort-up")"></i>
+                    </a>
+                }
             </th>
             <th></th>
         </tr>
