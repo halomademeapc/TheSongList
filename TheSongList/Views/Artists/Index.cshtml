@@ -22,7 +22,7 @@
                 @Html.DisplayFor(modelItem => item.Item.Name)
                 <span class="badge badge-pill badge-primary ml-1">@Html.DisplayFor(modelItem => item.Count)</span>
             </span>
-            <span class="position-absolute h-100 bg-primary opacity-10 corner-tl" style="width: @getPercentage(item)%"></span>
+            <span class="position-absolute h-100 bg-primary opacity-10 corner-tl animate-grow-x" style="width: @getPercentage(item)%"></span>
         </a>
     }
 </div>

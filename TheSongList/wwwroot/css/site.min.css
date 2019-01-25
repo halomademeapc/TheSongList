@@ -1,1 +1,1 @@
-.opacity-20{opacity:.2}.opacity-10{opacity:.1}.corner-tl{top:0;left:0}
+.opacity-20{opacity:.2}.opacity-10{opacity:.1}.corner-tl{top:0;left:0}.animate-grow-x{transform-origin:left;animation:grow-x forwards ease 1.5s}@keyframes grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}
