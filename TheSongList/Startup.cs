@@ -45,6 +45,7 @@ namespace TheSongList
                 Configuration["Lastfm:ClientId"],
                 Configuration["Lastfm:ClientSecret"]
                 ));
+            services.AddScoped<MetadataService>();
 
             services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddAuthentication(v =>

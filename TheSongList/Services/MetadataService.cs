@@ -1,0 +1,31 @@
+﻿using IF.Lastfm.Core.Api;
+using System.Linq;
+using System.Threading.Tasks;
+using TheSongList.Models.Entities;
+using TheSongList.Models.Lastfm;
+
+namespace TheSongList.Services
+{
+    public class MetadataService
+    {
+        private LastfmClient client;
+
+        public MetadataService(LastfmClient client)
+        {
+            this.client = client;
+        }
+
+        public async Task<SongInfo> GetTrackInfo(Song s)
+        {
+            var response = await client.Track.GetInfoAsync(s.Name, s.Artist.Name);
+            return new SongInfo
+            {
+                Song = s,
+                AlbumName = response?.Content?.AlbumName,
+                Duration = response?.Content?.Duration,
+                Image = response?.Content?.Images?.Largest != null ? response?.Content?.Images?.Largest.ToString() : string.Empty,
+                Tags = response?.Content?.TopTags?.Select(t => t.Name)
+            };
+        }
+    }
+}
