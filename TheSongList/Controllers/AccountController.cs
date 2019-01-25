@@ -9,10 +9,7 @@ namespace TheSongList.Controllers
         public IActionResult Login(string returnUrl) => Redirect(returnUrl);
 
         [HttpGet]
-        public IActionResult Logout()
-        {
-            var target = $"{Request.Scheme}://{Request.Host}";
-            return Redirect($"https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue={target}");
-        }
+        public IActionResult Logout() =>
+            Redirect($"https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout");
     }
 }
