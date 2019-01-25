@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Eras/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> PutEra(int id, Era era)
         {
             if (id != era.Id)
@@ -71,7 +72,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Eras
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<Era>> PostEra(Era era)
         {
             _context.Eras.Add(era);
@@ -80,7 +81,7 @@ namespace TheSongList.Controllers.Api
             return CreatedAtAction("GetEra", new { id = era.Id }, era);
         }
 
-        [HttpPost("{id}/assign")]
+        [HttpPost("{id}/assign"), Authorize]
         public async Task<ActionResult<Era>> AssignEra([FromRoute] int id, [FromBody]List<string> songNames)
         {
             songNames = songNames.Select(s => s.ToLower()).ToList();
@@ -92,7 +93,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Eras/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult<Era>> DeleteEra(int id)
         {
             var era = await _context.Eras.FindAsync(id);

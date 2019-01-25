@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Artists/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> PutArtist(int id, Artist artist)
         {
             if (id != artist.Id)
@@ -71,7 +72,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Artists
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<Artist>> PostArtist(Artist artist)
         {
             _context.Artists.Add(artist);
@@ -80,7 +81,7 @@ namespace TheSongList.Controllers.Api
             return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
         }
 
-        [HttpPost("load")]
+        [HttpPost("load"), Authorize]
         public async Task<ActionResult<IEnumerable<Artist>>> BulkLoadArtists([FromBody]List<Artist> artists)
         {
             _context.Artists.AddRange(artists);
@@ -90,7 +91,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Artists/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult<Artist>> DeleteArtist(int id)
         {
             var artist = await _context.Artists.FindAsync(id);
