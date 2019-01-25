@@ -14,7 +14,7 @@ namespace TheSongList.Models
         public int MaxPage => (TotalResults + ResultsPerPage - 1) / ResultsPerPage;
         public IEnumerable<int> Links => Enumerable.Range(FIRST_PAGE, MaxPage).Where(ShouldDisplay);
         public int FirstResult => ResultsPerPage * (CurrentPage - 1) + 1;
-        public int LastResult => FirstResult + ResultsPerPage;
+        public int LastResult => FirstResult + ResultsPerPage > TotalResults ? TotalResults : FirstResult + ResultsPerPage;
 
 
         private bool ShouldDisplay(int pageNumber) =>

@@ -41,6 +41,30 @@ namespace TheSongList.Services
             };
         }
 
+        public async Task<int> GetArtistScale() => await db.Artists.MaxAsync(a => a.Songs.Count());
+
+        public async Task<PaginatedData<SumPair<Artist>>> FindArtists(string query, int page, int pageSize = DEFAULT_PAGE)
+        {
+            var artists = db.Artists.Where(a => string.IsNullOrEmpty(query) || a.Name.ToLower().Contains(query.ToLower()));
+
+            return new PaginatedData<SumPair<Artist>>
+            {
+                Info = new PageInfo
+                {
+                    CurrentPage = page,
+                    ResultsPerPage = pageSize,
+                    TotalResults = await artists.CountAsync()
+                },
+                Data = await artists.OrderBy(a => a.Name)
+                .Select(a => new SumPair<Artist>
+                {
+                    Count = a.Songs.Count(),
+                    Item = a
+                })
+                .Skip(CalculateSkip(page, pageSize))
+                .Take(pageSize).ToListAsync()
+            };
+        }
 
         private int CalculateSkip(int page, int pageSize) => (page - 1) * pageSize;
     }

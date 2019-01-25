@@ -19,10 +19,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Songs
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
