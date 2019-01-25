@@ -14,7 +14,7 @@ namespace TheSongList.Models.Entities
         [Display(Name = "Era")]
         public int? EraId { get; set; }
 
-        [ForeignKey("ArtistId")]
+        [Required, ForeignKey("ArtistId")]
         public virtual Artist Artist { get; set; }
         [ForeignKey("EraId")]
         public virtual Era Era { get; set; }
