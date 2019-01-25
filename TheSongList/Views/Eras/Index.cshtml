@@ -1,45 +1,32 @@
 ﻿@model IEnumerable<SumPair<Era>>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Eras";
+    var maxSongs = Model.Max(p => p.Count);
+
+    float getPercentage(SumPair<Era> i) => maxSongs > 0 ? (float)i.Count * 100 / maxSongs : 0;
 }
 
-<h2>Index</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@{
-    var eraObj = new Era();
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => eraObj.Label)
-            </th>
-            <th>
-                Songs
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr style="color: @(!string.IsNullOrEmpty(item.Item.Color) ? item.Item.Color : "black")">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Item.Label)
-                </td>
-                <td>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Eras</h2>
+    <a class="btn btn-outline-primary my-3" asp-action="Create">
+        <i class="fas fa-plus mr-2"></i>
+        Create New
+    </a>
+</div>
+<div class="list-group">
+    @foreach (var item in Model)
+    {
+        <a asp-action="Details" asp-route-id="@item.Item.Id" class="list-group-item list-group-item-action position-relative">
+            <span>
+                @Html.DisplayFor(modelItem => item.Item.Label)
+                <span class="badge badge-pill badge-primary ml-1"
+                      style="background-color: @(!string.IsNullOrEmpty(item.Item.Color) ? item.Item.Color : "black")">
                     @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </span>
+            </span>
+            <span class="position-absolute h-100 opacity-10 corner-tl"
+                  style="width: @getPercentage(item)%; background-color: @(!string.IsNullOrEmpty(item.Item.Color) ? item.Item.Color : "black")"></span>
+        </a>
+    }
+</div>
