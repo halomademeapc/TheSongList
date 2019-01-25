@@ -9,13 +9,14 @@ namespace TheSongList.Models.Entities
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
+        [Required, Display(Name = "Artist")]
         public int ArtistId { get; set; }
+        [Display(Name = "Era")]
         public int? EraId { get; set; }
 
-        [ForeignKey("ArtistId"), Display(Name = "Artist")]
+        [ForeignKey("ArtistId")]
         public virtual Artist Artist { get; set; }
-        [ForeignKey("EraId"), Display(Name = "Era")]
+        [ForeignKey("EraId")]
         public virtual Era Era { get; set; }
     }
 }

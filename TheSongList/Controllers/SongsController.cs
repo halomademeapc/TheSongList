@@ -48,8 +48,8 @@ namespace TheSongList.Controllers
         // GET: Songs/Create
         public IActionResult Create()
         {
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name");
-            ViewData["EraId"] = new SelectList(_context.Eras, "Id", "Label");
+            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name");
+            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label");
             return View();
         }
 
@@ -66,8 +66,8 @@ namespace TheSongList.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", song.ArtistId);
-            ViewData["EraId"] = new SelectList(_context.Eras, "Id", "Label", song.EraId);
+            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId);
+            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId);
             return View(song);
         }
 
@@ -84,8 +84,8 @@ namespace TheSongList.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", song.ArtistId);
-            ViewData["EraId"] = new SelectList(_context.Eras, "Id", "Label", song.EraId);
+            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId);
+            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId);
             return View(song);
         }
 
@@ -121,8 +121,8 @@ namespace TheSongList.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", song.ArtistId);
-            ViewData["EraId"] = new SelectList(_context.Eras, "Id", "Label", song.EraId);
+            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId);
+            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId);
             return View(song);
         }
 
