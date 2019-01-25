@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -43,7 +42,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Songs/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> PutSong(int id, Song song)
         {
             if (id != song.Id)
@@ -73,7 +72,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Songs
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<Song>> PostSong(Song song)
         {
             _context.Songs.Add(song);
@@ -83,7 +82,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Songs/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult<Song>> DeleteSong(int id)
         {
             var song = await _context.Songs.FindAsync(id);

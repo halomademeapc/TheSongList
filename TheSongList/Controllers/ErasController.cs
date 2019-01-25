@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,6 +53,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Eras/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -60,7 +62,7 @@ namespace TheSongList.Controllers
         // POST: Eras/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Label,SortOrder,Color")] Era era)
         {
@@ -74,6 +76,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Eras/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,7 +95,7 @@ namespace TheSongList.Controllers
         // POST: Eras/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Label,SortOrder,Color")] Era era)
         {
@@ -125,6 +128,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Eras/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +147,7 @@ namespace TheSongList.Controllers
         }
 
         // POST: Eras/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Delete"), Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
