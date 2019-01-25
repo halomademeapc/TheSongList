@@ -1,19 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using TheSongList.Models;
+using TheSongList.Models.Entities;
+using TheSongList.Services;
 
 namespace TheSongList.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private SongContext db;
+
+        public HomeController(SongContext db)
         {
-            return View();
+            this.db = db;
         }
+
+        public async Task<IActionResult> Index() =>
+            View(new Stats
+            {
+                Artists = await db.Artists.CountAsync(),
+                Songs = await db.Songs.CountAsync(),
+                Eras = await db.Eras.CountAsync(),
+                NewestSong = await db.Songs
+                    .Include(s => s.Artist)
+                    .OrderByDescending(s => s.Id).FirstOrDefaultAsync(),
+                MaxArtist = await db.Artists.Select(a => new SumPair<Artist>
+                {
+                    Count = a.Songs.Count(),
+                    Item = a
+                }).OrderByDescending(i => i.Count).FirstOrDefaultAsync(),
+                MaxEra = await db.Eras.Select(e => new SumPair<Era>
+                {
+                    Count = e.Songs.Count(),
+                    Item = e
+                }).OrderByDescending(i => i.Count).FirstOrDefaultAsync()
+            });
 
         public IActionResult About()
         {
