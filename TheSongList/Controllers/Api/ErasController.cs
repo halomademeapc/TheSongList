@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -80,6 +78,17 @@ namespace TheSongList.Controllers.Api
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetEra", new { id = era.Id }, era);
+        }
+
+        [HttpPost("{id}/assign")]
+        public async Task<ActionResult<Era>> AssignEra([FromRoute] int id, [FromBody]List<string> songNames)
+        {
+            songNames = songNames.Select(s => s.ToLower()).ToList();
+            var songs = await _context.Songs.Where(s => songNames.Contains(s.Name.ToLower())).ToListAsync();
+            songs.ForEach(s => s.EraId = id);
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Eras.Include(e => e.Songs).FirstOrDefaultAsync(e => e.Id == id));
         }
 
         // DELETE: api/Eras/5

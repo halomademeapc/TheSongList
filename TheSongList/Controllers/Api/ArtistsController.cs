@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -80,6 +78,15 @@ namespace TheSongList.Controllers.Api
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
+        }
+
+        [HttpPost("load")]
+        public async Task<ActionResult<IEnumerable<Artist>>> BulkLoadArtists([FromBody]List<Artist> artists)
+        {
+            _context.Artists.AddRange(artists);
+            await _context.SaveChangesAsync();
+
+            return await GetArtists();
         }
 
         // DELETE: api/Artists/5
