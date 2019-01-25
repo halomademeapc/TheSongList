@@ -19,11 +19,9 @@ namespace TheSongList.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var songContext = _context.Songs.Include(s => s.Artist).Include(s => s.Era)
-                .OrderBy(s => s.Name);
-            return View(await songContext.ToListAsync());
+            return View();
         }
 
         // GET: Songs/Details/5

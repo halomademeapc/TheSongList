@@ -1,7 +1,27 @@
-﻿@model IEnumerable<TheSongList.Models.Entities.Song>
+﻿@inject SearchService search
 
 @{
     ViewData["Title"] = "Index";
+    string query = Context.Request.Query["query"].ToString();
+    int currentPage = int.TryParse(Context.Request.Query["page"], out var i) ? i : 1;
+    bool descending = Context.Request.Query["direction"].ToString() == "desc";
+    string orderPropertyName = Context.Request.Query["order"].ToString();
+    System.Linq.Expressions.Expression<Func<Song, object>> order;
+    switch (orderPropertyName)
+    {
+        case "artist":
+            order = s => s.Artist.Name;
+            break;
+        case "era":
+            order = s => s.Era.SortOrder;
+            break;
+        default:
+            order = s => s.Name;
+            break;
+    }
+
+    var results = await search.FindSongs(query, currentPage, order, descending);
+    var dummy = new Song();
 }
 
 <h2>Index</h2>
@@ -13,19 +33,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => dummy.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Artist)
+                @Html.DisplayNameFor(model => dummy.Artist)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Era)
+                @Html.DisplayNameFor(model => dummy.Era)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in results.Data)
         {
             <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
                 <td>

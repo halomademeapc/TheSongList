@@ -35,6 +35,8 @@ namespace TheSongList
                 options.UseSqlite("Data Source=songs.db");
             });
 
+            services.AddScoped<SearchService>();
+
             services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddAuthentication(v =>
                 {
