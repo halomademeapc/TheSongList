@@ -17,7 +17,7 @@
         <div class="flex flex-row">
             @foreach (var t in info.Tags)
             {
-                <span class="badge badge-light px-2">@t</span>
+                <span class="badge badge-pill badge-light">@t</span>
             }
         </div>
     }
@@ -44,37 +44,6 @@
     var songObj = new Song();
 }
 <div>
-    <h4>Songs - @Model.Songs.Count()</h4>
-    <hr />
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => songObj.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => songObj.Era)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Songs)
-            {
-                <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Era.Label)
-                    </td>
-                    <td>
-                        <a asp-controller="Songs" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Songs" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-controller="Songs" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <h5 class="mt-4 mb-2">Songs - @Model.Songs.Count()</h5>
+    <partial name="_SongList_Era" model="Model.Songs" />
 </div>
