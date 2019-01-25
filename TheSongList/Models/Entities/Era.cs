@@ -10,8 +10,10 @@ namespace TheSongList.Models.Entities
         public int Id { get; set; }
         [Required]
         public string Label { get; set; }
-        [Required]
+        [Required, Display(Name = "Sort Order")]
         public int SortOrder { get; set; }
+        [Display(Name = "Color")]
+        public string Color { get; set; }
 
         public virtual ICollection<Song> Songs { get; set; }
     }
