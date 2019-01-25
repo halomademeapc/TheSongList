@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TheSongList.Models.Entities
 {
@@ -17,9 +13,9 @@ namespace TheSongList.Models.Entities
         public int ArtistId { get; set; }
         public int? EraId { get; set; }
 
-        [ForeignKey("ArtistId")]
+        [ForeignKey("ArtistId"), Display(Name = "Artist")]
         public virtual Artist Artist { get; set; }
-        [ForeignKey("EraId")]
+        [ForeignKey("EraId"), Display(Name = "Era")]
         public virtual Era Era { get; set; }
     }
 }
