@@ -30,14 +30,14 @@ namespace TheSongList
 
             services.AddDbContext<SongContext>(options =>
             {
-                options.UseSqlite("Data Source=blogging.db");
+                options.UseSqlite("Data Source=songs.db");
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SongContext db)
         {
             if (env.IsDevelopment())
             {
@@ -48,6 +48,8 @@ namespace TheSongList
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            db.Database.Migrate();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
