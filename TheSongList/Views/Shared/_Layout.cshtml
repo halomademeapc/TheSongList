@@ -22,25 +22,25 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse mr-auto" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     <a class="nav-item nav-link" asp-area="" asp-controller="Songs" asp-action="Index">Songs</a>
                     <a class="nav-item nav-link" asp-area="" asp-controller="Eras" asp-action="Index">Eras</a>
                     <a class="nav-item nav-link" asp-area="" asp-controller="Artists" asp-action="Index">Artists</a>
                 </div>
-            </div>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @User.Identity.Name
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a asp-controller="Account" asp-action="Logout" class="dropdown-item">Log Out</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @User.Identity.Name
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a asp-controller="Account" asp-action="Logout" class="dropdown-item">Log Out</a>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     </nav>
 
