@@ -26,7 +26,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr style="color: @(!string.IsNullOrEmpty(item.Color) ? item.Color : "black")">
             <td>
                 @Html.DisplayFor(modelItem => item.Label)
             </td>

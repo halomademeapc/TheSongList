@@ -1,4 +1,4 @@
-﻿@model TheSongList.Models.Entities.Artist
+﻿@model DetailWithSongs<Artist>
 
 @{
     ViewData["Title"] = "Details";
@@ -11,14 +11,58 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Detail.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Detail.Name)
         </dd>
     </dl>
 </div>
+@{
+    var songObj = new Song();
+}
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <h4>Songs</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => songObj.Name)
+                </th>
+                <th class="d-none">
+                    @Html.DisplayNameFor(model => songObj.Artist)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => songObj.Era)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Songs)
+            {
+                <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td class="d-none">
+                        @Html.DisplayFor(modelItem => item.Artist.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Era.Label)
+                    </td>
+                    <td>
+                        <a asp-controller="Songs" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Songs" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-controller="Songs" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Detail.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

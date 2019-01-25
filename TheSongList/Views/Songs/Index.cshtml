@@ -27,7 +27,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr style="color: @(item.Era?.Color ?? "black")">
+            <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>

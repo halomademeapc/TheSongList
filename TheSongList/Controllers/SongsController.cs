@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -22,7 +20,8 @@ namespace TheSongList.Controllers
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-            var songContext = _context.Songs.Include(s => s.Artist).Include(s => s.Era);
+            var songContext = _context.Songs.Include(s => s.Artist).Include(s => s.Era)
+                .OrderBy(s => s.Name);
             return View(await songContext.ToListAsync());
         }
 

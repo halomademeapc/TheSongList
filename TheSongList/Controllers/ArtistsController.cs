@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using TheSongList.Models;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -39,8 +37,14 @@ namespace TheSongList.Controllers
             {
                 return NotFound();
             }
+            var songs = await _context.Songs
+                .Include(s => s.Artist)
+                .Include(s => s.Era)
+                .Where(s => s.Artist == artist)
+                .OrderBy(s => s.Name)
+                .ToListAsync();
 
-            return View(artist);
+            return View(new DetailWithSongs<Artist>(artist, songs));
         }
 
         // GET: Artists/Create
