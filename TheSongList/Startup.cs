@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +35,18 @@ namespace TheSongList
                 options.UseSqlite("Data Source=songs.db");
             });
 
+            services.AddIdentity<IdentityUser, IdentityRole>();
+            services.AddAuthentication(v =>
+                {
+                    v.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                    v.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                })
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options =>
                 {
@@ -60,7 +74,7 @@ namespace TheSongList
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
+            app.UseAuthentication().UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
