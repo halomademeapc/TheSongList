@@ -14,6 +14,12 @@
     animation: grow-x forwards ease 1.5s;
 }
 
+.bg-img-fade {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 @keyframes grow-x {
     from {
         transform: scaleX(0)

@@ -1,23 +1,45 @@
 ﻿@model DetailWithSongs<Artist>
+@inject MetadataService service
 
 @{
     ViewData["Title"] = "Details";
+    var info = await service.GetArtistInfo(Model.Detail);
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>Artist</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Detail.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Detail.Name)
-        </dd>
-    </dl>
+<div class="jumbotron bg-dark text-light bg-img-fade"
+     style="@(string.IsNullOrEmpty(info?.Image) ? string.Empty : $"background-image: linear-gradient( rgba(0,0,0,0.7), rgba(0, 0, 0, 0.7) ), url('{info.Image}')")">
+    <h1 class="display-3">@Html.DisplayFor(m => m.Detail.Name)</h1>
+    @if (info.YearFormed.HasValue && info.YearFormed.Value > 0)
+    {
+        <p class="h6">Formed in @info.YearFormed.Value</p>
+    }
+    @if (info.Tags != null && info.Tags.Any())
+    {
+        <div class="flex flex-row">
+            @foreach (var t in info.Tags)
+            {
+                <span class="badge badge-light px-2">@t</span>
+            }
+        </div>
+    }
+    <div class="mt-5">
+        <a class="btn btn-sm btn-outline-light" asp-action="Index">
+            <i class="fas fa-chevron-left mr-1"></i>
+            Back to List
+        </a>
+        <a class="btn btn-sm btn-outline-light" asp-action="Edit" asp-route-id="@Model.Detail.Id">
+            <i class="fas fa-edit mr-1"></i>
+            Edit
+        </a>
+        <a class="btn btn-sm btn-outline-light" asp-action="Delete" asp-route-id="@Model.Detail.Id">
+            <i class="fas fa-trash mr-1"></i>
+            Delete
+        </a>
+    </div>
 </div>
+@if (!string.IsNullOrEmpty(info.Summary))
+{
+    <p>@Html.Raw(info.Summary)</p>
+}
 @{
     var songObj = new Song();
 }
@@ -55,8 +77,4 @@
             }
         </tbody>
     </table>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Detail.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>

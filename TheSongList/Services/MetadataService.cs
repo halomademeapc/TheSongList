@@ -27,5 +27,19 @@ namespace TheSongList.Services
                 Tags = response?.Content?.TopTags?.Select(t => t.Name)
             };
         }
+
+        public async Task<ArtistInfo> GetArtistInfo(Artist a)
+        {
+            var response = await client.Artist.GetInfoAsync(a.Name);
+            return new ArtistInfo
+            {
+                Artist = a,
+                Summary = response?.Content?.Bio?.Summary,
+                Biography = response?.Content?.Bio?.Content,
+                YearFormed = response?.Content?.Bio?.YearFormed,
+                Tags = response?.Content?.Tags?.Select(t => t.Name),
+                Image = response?.Content?.MainImage?.Largest != null ? response.Content.MainImage.Large.ToString() : string.Empty
+            };
+        }
     }
 }
