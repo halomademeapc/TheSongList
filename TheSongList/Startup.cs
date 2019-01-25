@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Google;
+﻿using IF.Lastfm.Core.Api;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +41,10 @@ namespace TheSongList
             });
 
             services.AddScoped<SearchService>();
+            services.AddScoped(provider => new LastfmClient(
+                Configuration["Lastfm:ClientId"],
+                Configuration["Lastfm:ClientSecret"]
+                ));
 
             services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddAuthentication(v =>
