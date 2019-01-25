@@ -20,7 +20,7 @@ namespace TheSongList.Controllers
         // GET: Artists
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Artists.ToListAsync());
+            return View(await _context.Artists.OrderBy(a => a.Name).ToListAsync());
         }
 
         // GET: Artists/Details/5

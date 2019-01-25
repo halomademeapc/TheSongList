@@ -20,7 +20,7 @@ namespace TheSongList.Controllers
         // GET: Eras
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Eras.ToListAsync());
+            return View(await _context.Eras.OrderBy(e => e.SortOrder).ToListAsync());
         }
 
         // GET: Eras/Details/5
