@@ -18,10 +18,13 @@ namespace TheSongList.Controllers
         }
 
         // GET: Artists
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Artists.OrderBy(a => a.Name).ToListAsync());
-        }
+        public async Task<IActionResult> Index() =>
+            View(await _context.Artists.OrderBy(a => a.Name)
+                .Select(a => new SumPair<Artist>
+                {
+                    Item = a,
+                    Count = a.Songs.Count()
+                }).ToListAsync());
 
         // GET: Artists/Details/5
         public async Task<IActionResult> Details(int? id)

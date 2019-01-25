@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TheSongList.Models.Entities.Era>
+﻿@model IEnumerable<SumPair<Era>>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,39 +9,37 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@{
+    var eraObj = new Era();
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Label)
+                @Html.DisplayNameFor(model => eraObj.Label)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SortOrder)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
+                Songs
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr style="color: @(!string.IsNullOrEmpty(item.Color) ? item.Color : "black")">
-            <td>
-                @Html.DisplayFor(modelItem => item.Label)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SortOrder)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr style="color: @(!string.IsNullOrEmpty(item.Item.Color) ? item.Item.Color : "black")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Label)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

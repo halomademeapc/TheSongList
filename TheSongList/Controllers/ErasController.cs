@@ -18,10 +18,13 @@ namespace TheSongList.Controllers
         }
 
         // GET: Eras
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Eras.OrderBy(e => e.SortOrder).ToListAsync());
-        }
+        public async Task<IActionResult> Index() =>
+            View(await _context.Eras.OrderBy(e => e.SortOrder)
+                .Select(e => new SumPair<Era>
+                {
+                    Item = e,
+                    Count = e.Songs.Count()
+                }).ToListAsync());
 
         // GET: Eras/Details/5
         public async Task<IActionResult> Details(int? id)
