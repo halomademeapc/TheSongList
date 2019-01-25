@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Entities\" />
+    <Folder Include="Controllers\Api\" />
   </ItemGroup>
 
 </Project>
