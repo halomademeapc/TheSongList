@@ -30,9 +30,6 @@
                 <th>
                     @Html.DisplayNameFor(model => songObj.Name)
                 </th>
-                <th class="d-none">
-                    @Html.DisplayNameFor(model => songObj.Artist)
-                </th>
                 <th>
                     @Html.DisplayNameFor(model => songObj.Era)
                 </th>
@@ -45,9 +42,6 @@
                 <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td class="d-none">
-                        @Html.DisplayFor(modelItem => item.Artist.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Era.Label)
