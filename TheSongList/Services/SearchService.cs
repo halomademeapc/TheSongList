@@ -36,6 +36,7 @@ namespace TheSongList.Services
                     TotalResults = await songs.CountAsync()
                 },
                 Data = await ordered
+                    .ThenBy(s => s.Name)
                     .Skip(CalculateSkip(page, pageSize))
                     .Take(pageSize).ToListAsync()
             };
