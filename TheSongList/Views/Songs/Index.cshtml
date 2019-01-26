@@ -1,48 +1,145 @@
-﻿@model IEnumerable<TheSongList.Models.Entities.Song>
+﻿@inject SearchService search
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Songs";
+    string query = Context.Request.Query["query"].ToString();
+    int currentPage = int.TryParse(Context.Request.Query["page"], out var i) ? i : 1;
+    bool descending = Context.Request.Query["direction"].ToString() == "desc";
+    string orderPropertyName = Context.Request.Query["order"].ToString();
+    System.Linq.Expressions.Expression<Func<Song, object>> order;
+    switch (orderPropertyName)
+    {
+        case "artist":
+            order = s => s.Artist.Name;
+            break;
+        case "era":
+            order = s => s.Era.SortOrder;
+            break;
+        default:
+            order = s => s.Name;
+            break;
+    }
+
+    var results = await search.FindSongs(query, currentPage, order, descending);
+    var dummy = new Song();
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Songs</h2>
+    <a class="btn btn-outline-primary my-3" asp-action="Create">
+        <i class="fas fa-plus mr-2"></i>
+        Create New
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Artist)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Era)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<div class="btn-toolbar d-flex justify-content-end flex-wrap" role="toolbar">
+    <form asp-action="Index" method="get" class="input-group my-2">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="btnGroupAddon" name="query" value="@query">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-outline-secondary" id="btnGroupAddon">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+    <div class="btn-group my-2 ml-2" role="group">
+        @foreach (var l in results.Info.Links)
         {
-            <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Artist.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Era.Label)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+            <a asp-route-order="@orderPropertyName" asp-route-direction="@(descending ? "desc" : "asc")"
+               asp-route-query="@query" asp-route-page="@l" class="btn @(l == currentPage ? "btn-secondary disabled" : "btn-outline-secondary")">
+                @l
+            </a>
         }
-    </tbody>
-</table>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @if (!string.IsNullOrEmpty(orderPropertyName) && orderPropertyName != "name")
+                    {
+                        <a asp-route-order="name" asp-route-direction="asc" class="text-dark"
+                           asp-route-query="@query" asp-route-page="1">@Html.DisplayNameFor(model => dummy.Name)</a>
+                    }
+                    else
+                    {
+                        <a asp-route-order="name" asp-route-direction="@(descending ? "asc": "desc")" class="text-dark"
+                           asp-route-query="@query" asp-route-page="1">
+                            @Html.DisplayNameFor(model => dummy.Name)
+                            <i class="fas @(descending ? "fa-sort-down" : "fa-sort-up")"></i>
+                        </a>
+                    }
+                </th>
+                <th>
+                    @if (orderPropertyName != "artist")
+                    {
+                        <a asp-route-order="artist" asp-route-direction="asc" class="text-dark"
+                           asp-route-query="@query" asp-route-page="1">@Html.DisplayNameFor(model => dummy.Artist)</a>
+                    }
+                    else
+                    {
+                        <a asp-route-order="artist" asp-route-direction="@(descending ? "asc": "desc")" class="text-dark"
+                           asp-route-query="@query" asp-route-page="1">
+                            @Html.DisplayNameFor(model => dummy.Artist)
+                            <i class="fas @(descending ? "fa-sort-down" : "fa-sort-up")"></i>
+                        </a>
+                    }
+                </th>
+                <th>
+                    @if (orderPropertyName != "era")
+                    {
+                        <a asp-route-order="era" asp-route-direction="asc" class="text-dark"
+                           asp-route-query="@query" asp-route-page="1">@Html.DisplayNameFor(model => dummy.Era)</a>
+                    }
+                    else
+                    {
+                        <a asp-route-order="era" asp-route-direction="@(descending ? "asc": "desc")" class="text-dark"
+                           asp-route-query="@query" asp-route-page="1">
+                            @Html.DisplayNameFor(model => dummy.Era)
+                            <i class="fas @(descending ? "fa-sort-down" : "fa-sort-up")"></i>
+                        </a>
+                    }
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in results.Data)
+            {
+                <tr style="color: @(!string.IsNullOrEmpty(item.Era?.Color) ? item.Era.Color : "black")">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Artist.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Era.Label)
+                    </td>
+                    <td>
+                        <a class="mx-2" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                        <a class="mx-2" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a>
+                        <a class="mx-2" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="text-right mb-2 text-muted">
+    <small>
+        Showing results @results.Info.FirstResult - @results.Info.LastResult of @results.Info.TotalResults
+    </small>
+</div>
+<div class="btn-toolbar d-flex justify-content-end flex-wrap" role="toolbar">
+    <div class="btn-group my-2" role="group">
+        @foreach (var l in results.Info.Links)
+        {
+            <a asp-route-order="@orderPropertyName" asp-route-direction="@(descending ? "desc" : "asc")"
+               asp-route-query="@query" asp-route-page="@l" class="btn @(l == currentPage ? "btn-secondary disabled" : "btn-outline-secondary")">
+                @l
+            </a>
+        }
+    </div>
+</div>

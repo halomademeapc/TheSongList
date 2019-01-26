@@ -19,12 +19,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index()
-        {
-            var songContext = _context.Songs.Include(s => s.Artist).Include(s => s.Era)
-                .OrderBy(s => s.Name);
-            return View(await songContext.ToListAsync());
-        }
+        public IActionResult Index() => View();
 
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -50,9 +45,22 @@ namespace TheSongList.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name");
-            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label");
+            SetNewViewBag();
             return View();
+        }
+
+        private void SetNewViewBag()
+        {
+            var blankSelect = new SelectListItem
+            {
+                Selected = true,
+                Disabled = true,
+                Value = string.Empty,
+                Text = string.Empty
+            };
+
+            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name").Prepend(blankSelect);
+            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label").Prepend(blankSelect);
         }
 
         // POST: Songs/Create
@@ -68,9 +76,21 @@ namespace TheSongList.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId);
-            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId);
+            BindViewBag(song);
             return View(song);
+        }
+
+        private void BindViewBag(Song song)
+        {
+            var blankSelect = new SelectListItem
+            {
+                Disabled = true,
+                Value = string.Empty,
+                Text = string.Empty
+            };
+
+            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId).Prepend(blankSelect);
+            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId).Prepend(blankSelect);
         }
 
         // GET: Songs/Edit/5
@@ -87,8 +107,7 @@ namespace TheSongList.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId);
-            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId);
+            BindViewBag(song);
             return View(song);
         }
 
@@ -124,8 +143,7 @@ namespace TheSongList.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists.OrderBy(a => a.Name), "Id", "Name", song.ArtistId);
-            ViewData["EraId"] = new SelectList(_context.Eras.OrderBy(e => e.SortOrder), "Id", "Label", song.EraId);
+            BindViewBag(song);
             return View(song);
         }
 

@@ -1,42 +1,68 @@
-﻿@model IEnumerable<SumPair<Artist>>
+﻿@inject SearchService search
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Artists";
+    var maxSongs = await search.GetArtistScale();
+    string query = Context.Request.Query["query"].ToString();
+    int currentPage = int.TryParse(Context.Request.Query["page"], out var x) ? x : 1;
+    var results = await search.FindArtists(query, currentPage);
+
+    float getPercentage(SumPair<Artist> i) => maxSongs > 0 ? (float)i.Count * 100 / maxSongs : 0;
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Artists</h2>
+    <a class="btn btn-outline-primary my-3" asp-action="Create">
+        <i class="fas fa-plus mr-2"></i>
+        Create New
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => new Artist().Name)
-            </th>
-            <th>
-                Songs
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<div class="btn-toolbar d-flex justify-content-end flex-wrap" role="toolbar">
+    <form asp-action="Index" method="get" class="input-group my-2">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="btnGroupAddon" name="query" value="@query">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-outline-secondary" id="btnGroupAddon">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+    <div class="btn-group my-2 ml-2" role="group">
+        @foreach (var l in results.Info.Links)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Item.Id">Delete</a>
-                </td>
-            </tr>
+            <a asp-route-query="@query" asp-route-page="@l"
+               class="btn @(l == currentPage ? "btn-secondary disabled" : "btn-outline-secondary")">
+                @l
+            </a>
         }
-    </tbody>
-</table>
+    </div>
+</div>
+
+<div class="list-group">
+    @foreach (var item in results.Data)
+    {
+        <a asp-action="Details" asp-route-id="@item.Item.Id" class="list-group-item list-group-item-action position-relative">
+            <span>
+                @Html.DisplayFor(modelItem => item.Item.Name)
+                <span class="badge badge-pill badge-primary ml-1">@Html.DisplayFor(modelItem => item.Count)</span>
+            </span>
+            <span class="position-absolute h-100 bg-primary opacity-10 corner-tl animate-grow-x" style="width: @getPercentage(item)%"></span>
+        </a>
+    }
+</div>
+<div class="text-right mb-2 text-muted">
+    <small>
+        Showing results @results.Info.FirstResult - @results.Info.LastResult of @results.Info.TotalResults
+    </small>
+</div>
+<div class="btn-toolbar d-flex justify-content-end flex-wrap" role="toolbar">
+    <div class="btn-group my-2" role="group">
+        @foreach (var l in results.Info.Links)
+        {
+            <a asp-route-query="@query" asp-route-page="@l"
+               class="btn @(l == currentPage ? "btn-secondary disabled" : "btn-outline-secondary")">
+                @l
+            </a>
+        }
+    </div>
+</div>

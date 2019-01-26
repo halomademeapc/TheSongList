@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Google;
+﻿using IF.Lastfm.Core.Api;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,9 +15,12 @@ namespace TheSongList
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IHostingEnvironment env;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -35,6 +40,13 @@ namespace TheSongList
                 options.UseSqlite("Data Source=songs.db");
             });
 
+            services.AddScoped<SearchService>();
+            services.AddScoped(provider => new LastfmClient(
+                Configuration["Lastfm:ClientId"],
+                Configuration["Lastfm:ClientSecret"]
+                ));
+            services.AddScoped<MetadataService>();
+
             services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddAuthentication(v =>
                 {
@@ -47,7 +59,13 @@ namespace TheSongList
                     googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            services.AddMvc(options =>
+            {
+                if (env.IsDevelopment())
+                {
+                    options.Filters.Add(new AllowAnonymousFilter());
+                }
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
