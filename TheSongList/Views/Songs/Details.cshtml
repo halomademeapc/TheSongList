@@ -9,9 +9,24 @@
 <div class="jumbotron bg-dark text-light" style="@(string.IsNullOrEmpty(info?.Image) ? string.Empty : $"background-image: linear-gradient( rgba(0,0,0,0.7), rgba(0, 0, 0, 0.7) ), url('{info.Image}')")">
     <a asp-controller="Artists" asp-action="Details" asp-route-id="@Model.Artist.Id" class="h3 mb-0 text-white">@Html.DisplayFor(m => m.Artist.Name)</a>
     <h1 class="display-3">@Html.DisplayFor(m => m.Name)</h1>
-    @if (!string.IsNullOrEmpty(info?.AlbumName))
+    @if (!string.IsNullOrEmpty(info?.AlbumName) || info.Duration.HasValue && info.Duration.Value > TimeSpan.MinValue)
     {
-        <p class="h6">@info.AlbumName</p>
+        <p class="h6">
+            @if (!string.IsNullOrEmpty(info?.AlbumName))
+            {
+                <span>@info.AlbumName</span>
+                if (info.Duration.HasValue && info.Duration.Value > TimeSpan.MinValue)
+                {
+                    <span>
+                        -
+                    </span>
+                }
+            }
+            @if (info.Duration.HasValue && info.Duration.Value > TimeSpan.MinValue)
+            {
+                <span>@info.Duration.Value.ToString(@"m\:ss")</span>
+            }
+        </p>
     }
     @if (info.Tags != null && info.Tags.Any())
     {
