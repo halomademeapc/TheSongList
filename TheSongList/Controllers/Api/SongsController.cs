@@ -42,7 +42,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Songs/5
-        [HttpPut("{id}"), Authorize]
+        [HttpPut("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> PutSong(int id, Song song)
         {
             if (id != song.Id)
@@ -72,7 +72,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Songs
-        [HttpPost, Authorize]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Song>> PostSong(Song song)
         {
             _context.Songs.Add(song);
@@ -82,7 +82,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Songs/5
-        [HttpDelete("{id}"), Authorize]
+        [HttpDelete("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Song>> DeleteSong(int id)
         {
             var song = await _context.Songs.FindAsync(id);
