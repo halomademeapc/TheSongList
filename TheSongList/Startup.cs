@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Security.Claims;
 using TheSongList.Authorization;
@@ -85,6 +86,22 @@ namespace TheSongList
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "The Song List",
+                    Version = "v1",
+                    Description = "All the songs in Supernatural",
+                    Contact = new Contact
+                    {
+                        Name = "Alex Griffith",
+                        Email = "support@halomademeapc.com",
+                        Url = "https://www.halomademeapc.com"
+                    }
+                });
+            });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("CanEdit", policy =>
@@ -124,6 +141,12 @@ namespace TheSongList
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "The Song List v1");
+            });
 
             app.UseAuthentication().UseMvc(routes =>
             {
