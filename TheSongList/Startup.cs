@@ -1,16 +1,18 @@
 ﻿using IF.Lastfm.Core.Api;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Security.Claims;
+using TheSongList.Authorization;
 using TheSongList.Services;
 
 namespace TheSongList
@@ -73,7 +75,7 @@ namespace TheSongList
             {
                 if (env.IsDevelopment())
                 {
-                    options.Filters.Add(new AllowAnonymousFilter());
+                    //options.Filters.Add(new AllowAnonymousFilter());
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options =>
@@ -81,6 +83,26 @@ namespace TheSongList
                     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanEdit", policy =>
+                    policy.Requirements.Add(new HasEmailRequirement(GetPermittedEmails())));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, HasEmailHandler>();
+        }
+
+        private List<string> GetPermittedEmails()
+        {
+            try
+            {
+                return Configuration.GetSection("PermittedEmails").Get<List<string>>();
+            }
+            catch
+            {
+                return new List<string>();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
