@@ -11,5 +11,8 @@ namespace TheSongList.Controllers
         [HttpGet]
         public IActionResult Logout() =>
             Redirect($"https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout");
+
+        [HttpGet]
+        public IActionResult AccessDenied() => View();
     }
 }
