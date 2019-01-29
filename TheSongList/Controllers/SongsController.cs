@@ -42,7 +42,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Songs/Create
-        [Authorize]
+        [Authorize(Policy = "CanEdit")]
         public IActionResult Create()
         {
             SetNewViewBag();
@@ -66,7 +66,7 @@ namespace TheSongList.Controllers
         // POST: Songs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, Authorize]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ArtistId,EraId")] Song song)
         {
@@ -94,7 +94,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Songs/Edit/5
-        [Authorize]
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -114,7 +114,7 @@ namespace TheSongList.Controllers
         // POST: Songs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, Authorize]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ArtistId,EraId")] Song song)
         {
@@ -148,7 +148,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Songs/Delete/5
-        [Authorize]
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,7 +169,7 @@ namespace TheSongList.Controllers
         }
 
         // POST: Songs/Delete/5
-        [HttpPost, ActionName("Delete"), Authorize]
+        [HttpPost, ActionName("Delete"), Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -5,7 +5,7 @@ namespace TheSongList.Controllers
 {
     public class AccountController : Controller
     {
-        [HttpGet, Authorize]
+        [HttpGet, Authorize(Policy = "CanEdit")]
         public IActionResult Login(string returnUrl) => Redirect(returnUrl);
 
         [HttpGet]

@@ -42,7 +42,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Eras/5
-        [HttpPut("{id}"), Authorize]
+        [HttpPut("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> PutEra(int id, Era era)
         {
             if (id != era.Id)
@@ -72,7 +72,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Eras
-        [HttpPost, Authorize]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Era>> PostEra(Era era)
         {
             _context.Eras.Add(era);
@@ -81,7 +81,7 @@ namespace TheSongList.Controllers.Api
             return CreatedAtAction("GetEra", new { id = era.Id }, era);
         }
 
-        [HttpPost("{id}/assign"), Authorize]
+        [HttpPost("{id}/assign"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Era>> AssignEra([FromRoute] int id, [FromBody]List<string> songNames)
         {
             songNames = songNames.Select(s => s.ToLower()).ToList();
@@ -93,7 +93,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Eras/5
-        [HttpDelete("{id}"), Authorize]
+        [HttpDelete("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Era>> DeleteEra(int id)
         {
             var era = await _context.Eras.FindAsync(id);

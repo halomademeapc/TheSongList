@@ -42,7 +42,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Artists/5
-        [HttpPut("{id}"), Authorize]
+        [HttpPut("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> PutArtist(int id, Artist artist)
         {
             if (id != artist.Id)
@@ -72,7 +72,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Artists
-        [HttpPost, Authorize]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Artist>> PostArtist(Artist artist)
         {
             _context.Artists.Add(artist);
@@ -81,7 +81,7 @@ namespace TheSongList.Controllers.Api
             return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
         }
 
-        [HttpPost("load"), Authorize]
+        [HttpPost("load"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<IEnumerable<Artist>>> BulkLoadArtists([FromBody]List<Artist> artists)
         {
             _context.Artists.AddRange(artists);
@@ -91,7 +91,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Artists/5
-        [HttpDelete("{id}"), Authorize]
+        [HttpDelete("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Artist>> DeleteArtist(int id)
         {
             var artist = await _context.Artists.FindAsync(id);
