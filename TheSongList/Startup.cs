@@ -1,4 +1,5 @@
 ﻿using IF.Lastfm.Core.Api;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 using TheSongList.Services;
 
 namespace TheSongList
@@ -53,10 +55,18 @@ namespace TheSongList
                     v.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
                     v.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
                 })
-                .AddGoogle(googleOptions =>
+                .AddGoogle(o =>
                 {
-                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    o.ClientId = Configuration["Authentication:Google:ClientId"];
+                    o.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    o.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
+                    o.ClaimActions.Clear();
+                    o.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                    o.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    o.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    o.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    o.ClaimActions.MapJsonKey("urn:google:profile", "link");
+                    o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                 });
 
             services.AddMvc(options =>
