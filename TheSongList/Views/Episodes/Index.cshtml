@@ -19,6 +19,18 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Director)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Writer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AirDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Season)
             </th>
             <th></th>
@@ -32,6 +44,18 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Director)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Writer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AirDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProdCode)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Season.Name)

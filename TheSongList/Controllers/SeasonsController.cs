@@ -54,7 +54,7 @@ namespace TheSongList.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,SortOrder")] Season season)
+        public async Task<IActionResult> Create([Bind("Id,Name,AirTime,SortOrder")] Season season)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace TheSongList.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SortOrder")] Season season)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,AirTime,SortOrder")] Season season)
         {
             if (id != season.Id)
             {
