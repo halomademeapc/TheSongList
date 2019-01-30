@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Seasons/Create
+        [Authorize(Policy = "CanEdit")]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +55,7 @@ namespace TheSongList.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,AirTime,SortOrder")] Season season)
         {
@@ -66,6 +69,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Seasons/Edit/5
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +89,7 @@ namespace TheSongList.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,AirTime,SortOrder")] Season season)
         {
@@ -117,6 +122,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Seasons/Delete/5
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +142,7 @@ namespace TheSongList.Controllers
 
         // POST: Seasons/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

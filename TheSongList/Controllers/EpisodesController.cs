@@ -46,6 +46,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Episodes/Create
+        [Authorize(Policy = "CanEdit")]
         public IActionResult Create()
         {
             ViewData["SeasonId"] = new SelectList(_context.Seasons, "Id", "Name");
@@ -56,6 +57,7 @@ namespace TheSongList.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,EpisodeNumber,Name,SeasonId,Director,Writer,AirDate,ProdCode")] Episode episode)
         {
@@ -70,6 +72,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Episodes/Edit/5
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,6 +93,7 @@ namespace TheSongList.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EpisodeNumber,Name,SeasonId,Director,Writer,AirDate,ProdCode")] Episode episode)
         {
@@ -123,6 +127,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Episodes/Delete/5
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,6 +148,7 @@ namespace TheSongList.Controllers
 
         // POST: Episodes/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

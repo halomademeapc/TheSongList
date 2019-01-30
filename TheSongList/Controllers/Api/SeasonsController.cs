@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -25,7 +24,9 @@ namespace TheSongList.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
         {
-            return await _context.Seasons.ToListAsync();
+            return await _context.Seasons
+                .Include(s => s.Episodes)
+                .ToListAsync();
         }
 
         // GET: api/Seasons/5
@@ -43,7 +44,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Seasons/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> PutSeason(int id, Season season)
         {
             if (id != season.Id)
@@ -73,7 +74,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Seasons
-        [HttpPost]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Season>> PostSeason(Season season)
         {
             _context.Seasons.Add(season);
@@ -82,8 +83,17 @@ namespace TheSongList.Controllers.Api
             return CreatedAtAction("GetSeason", new { id = season.Id }, season);
         }
 
+        [HttpPost("load"), Authorize(Policy = "CanEdit")]
+        public async Task<ActionResult<IEnumerable<Season>>> BulkLoadSeasons([FromBody]List<Season> seasons)
+        {
+            _context.Seasons.AddRange(seasons);
+            await _context.SaveChangesAsync();
+
+            return await GetSeasons();
+        }
+
         // DELETE: api/Seasons/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Season>> DeleteSeason(int id)
         {
             var season = await _context.Seasons.FindAsync(id);

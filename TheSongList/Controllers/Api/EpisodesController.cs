@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // PUT: api/Episodes/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> PutEpisode(int id, Episode episode)
         {
             if (id != episode.Id)
@@ -73,7 +74,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // POST: api/Episodes
-        [HttpPost]
+        [HttpPost, Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Episode>> PostEpisode(Episode episode)
         {
             _context.Episodes.Add(episode);
@@ -83,7 +84,7 @@ namespace TheSongList.Controllers.Api
         }
 
         // DELETE: api/Episodes/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Policy = "CanEdit")]
         public async Task<ActionResult<Episode>> DeleteEpisode(int id)
         {
             var episode = await _context.Episodes.FindAsync(id);

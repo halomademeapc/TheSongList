@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Appearances/Create
+        [Authorize(Policy = "CanEdit")]
         public IActionResult Create()
         {
             ViewData["EpisodeId"] = new SelectList(_context.Episodes, "Id", "Id");
@@ -58,6 +60,7 @@ namespace TheSongList.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EpisodeId,SongId")] Appearance appearance)
         {
@@ -73,6 +76,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Appearances/Edit/5
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,6 +98,7 @@ namespace TheSongList.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EpisodeId,SongId")] Appearance appearance)
         {
@@ -128,6 +133,7 @@ namespace TheSongList.Controllers
         }
 
         // GET: Appearances/Delete/5
+        [Authorize(Policy = "CanEdit")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,6 +155,7 @@ namespace TheSongList.Controllers
 
         // POST: Appearances/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
