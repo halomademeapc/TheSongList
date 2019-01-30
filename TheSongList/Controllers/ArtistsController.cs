@@ -63,7 +63,7 @@ namespace TheSongList.Controllers
             {
                 _context.Add(artist);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = artist.Id });
             }
             return View(artist);
         }
@@ -115,7 +115,7 @@ namespace TheSongList.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = artist.Id });
             }
             return View(artist);
         }

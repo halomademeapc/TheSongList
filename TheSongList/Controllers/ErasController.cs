@@ -70,7 +70,7 @@ namespace TheSongList.Controllers
             {
                 _context.Add(era);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = era.Id });
             }
             return View(era);
         }
@@ -122,7 +122,7 @@ namespace TheSongList.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = era.Id });
             }
             return View(era);
         }

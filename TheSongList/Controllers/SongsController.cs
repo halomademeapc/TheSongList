@@ -74,7 +74,7 @@ namespace TheSongList.Controllers
             {
                 _context.Add(song);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = song.Id });
             }
             BindViewBag(song);
             return View(song);
@@ -141,7 +141,7 @@ namespace TheSongList.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = song.Id });
             }
             BindViewBag(song);
             return View(song);
