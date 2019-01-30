@@ -10,6 +10,8 @@ namespace TheSongList.Models.Entities
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [Display(Name = "Originally Aired")]
+        public string AirTime { get; set; }
         [Required, Display(Name = "Sort Order")]
         public int SortOrder { get; set; }
 
