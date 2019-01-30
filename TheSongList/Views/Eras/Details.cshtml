@@ -1,7 +1,7 @@
 ﻿@model DetailWithSongs<Era>
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Detail.Label;
 }
 <div class="jumbotron bg-dark text-light bg-img-fade" style="@($"background-image: linear-gradient( rgba(0,0,0,0.7), rgba(0, 0, 0, 0.7) ), linear-gradient({Model.Detail.Color}, {Model.Detail.Color})")">
     <h1 class="display-3">@Html.DisplayFor(m => m.Detail.Label)</h1>

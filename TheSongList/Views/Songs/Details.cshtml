@@ -2,7 +2,7 @@
 @inject MetadataService service
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
     var info = await service.GetTrackInfo(Model);
 }
 

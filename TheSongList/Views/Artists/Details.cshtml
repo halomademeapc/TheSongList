@@ -2,7 +2,7 @@
 @inject MetadataService service
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Detail.Name;
     var info = await service.GetArtistInfo(Model.Detail);
 }
 <div class="jumbotron bg-dark text-light bg-img-fade"
