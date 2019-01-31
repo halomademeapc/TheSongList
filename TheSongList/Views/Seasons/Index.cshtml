@@ -1,47 +1,33 @@
-﻿@model IEnumerable<TheSongList.Models.Entities.Season>
+﻿@model IEnumerable<SumPair<Season>>
 
 @{
     ViewData["Title"] = "Index";
+
+    var maxSongs = Model.Max(p => p.Count);
+    float getPercentage(SumPair<Season> i) => maxSongs > 0 ? (float)i.Count * 100 / maxSongs : 0;
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Seasons</h2>
+    <a class="btn btn-outline-primary my-3" asp-action="Create">
+        <i class="fas fa-plus mr-2"></i>
+        Create New
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AirTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SortOrder)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AirTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SortOrder)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="list-group">
+    @foreach (var e in Model)
+    {
+        <a asp-action="Details" asp-route-id="@e.Item.Id" class="list-group-item list-group-item-action position-relative">
+            <span class="ml-2">
+                @Html.DisplayFor(modelItem => e.Item.Name)
+                @if (!string.IsNullOrEmpty(e.Item.AirTime))
+                {
+                    <small class="text-faded ml-1">(@e.Item.AirTime)</small>
+                }
+                <span class="badge badge-pill badge-primary ml-1">@Html.DisplayFor(modelItem => e.Count)</span>
+            </span>
+            <span class="position-absolute h-100 bg-primary opacity-10 corner-tl animate-grow-x" style="width: @getPercentage(e)%"></span>
+        </a>
+    }
+</div>

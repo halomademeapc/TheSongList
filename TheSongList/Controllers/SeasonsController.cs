@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using TheSongList.Models;
 using TheSongList.Models.Entities;
 using TheSongList.Services;
 
@@ -23,7 +21,16 @@ namespace TheSongList.Controllers
         // GET: Seasons
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Seasons.ToListAsync());
+            var seasons = await _context.Seasons
+                .OrderBy(s => s.SortOrder)
+                .Select(s => new SumPair<Season>
+                {
+                    Item = s,
+                    Count = s.Episodes.Select(e => e.Appearances.Count()).Sum()
+                })
+                .ToListAsync();
+
+            return View(seasons);
         }
 
         // GET: Seasons/Details/5
