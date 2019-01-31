@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Episode>
+<div class="mt-4 mb-2 d-flex flex-row justify-content-between">
+    <h5>Episodes - @Model.Count()</h5>
+    <a asp-controller="Appearances" asp-action="Create" asp-route-song="@ViewBag.SongId" class="btn btn-sm btn-outline-primary">
+        <i class="fas fa-plus mr-2"></i>
+        Add
+    </a>
+</div>
+<div class="list-group">
+    @foreach (var e in Model.OrderBy(e => e.Season.SortOrder).ThenBy(e => e.EpisodeNumber))
+    {
+        <a asp-controller="Episodes" asp-action="Details" asp-route-id="@e.Id" class="list-group-item list-group-item-action">
+            <small class="text-muted">
+                <span>S@(e.Season.Name)</span>
+                <span>E@(e.EpisodeNumber)</span>
+            </small>
+            @if (!string.IsNullOrEmpty(e.Name))
+            {
+                <span class="ml-2">@e.Name</span>
+            }
+        </a>
+    }
+</div>
