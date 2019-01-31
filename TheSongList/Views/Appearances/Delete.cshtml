@@ -1,0 +1,38 @@
+﻿@model TheSongList.Models.Entities.Appearance
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Appearance</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Song)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Song.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Episode)
+        </dt>
+        <dd>
+            @($"S{Model.Episode.Season.Name} E{Model.Episode.EpisodeNumber}")
+            @if (!string.IsNullOrEmpty(Model.Episode.Name))
+            {
+                <span>@Model.Episode.Name</span>
+            }
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="EpisodeId" />
+        <input type="hidden" asp-for="SongId" />
+        <a href="javascript:history.back()" class="btn btn-light">Cancel</a>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </form>
+</div>

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SumPair<Season>>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var maxSongs = Model.Max(p => p.Count);
+    float getPercentage(SumPair<Season> i) => maxSongs > 0 ? (float)i.Count * 100 / maxSongs : 0;
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Seasons</h2>
+    <a class="btn btn-outline-primary my-3" asp-action="Create">
+        <i class="fas fa-plus mr-2"></i>
+        Create New
+    </a>
+</div>
+
+<div class="list-group">
+    @foreach (var e in Model)
+    {
+        <a asp-action="Details" asp-route-id="@e.Item.Id" class="list-group-item list-group-item-action position-relative">
+            <span class="ml-2">
+                @Html.DisplayFor(modelItem => e.Item.Name)
+                @if (!string.IsNullOrEmpty(e.Item.AirTime))
+                {
+                    <small class="text-faded ml-1">(@e.Item.AirTime)</small>
+                }
+                <span class="badge badge-pill badge-primary ml-1">@Html.DisplayFor(modelItem => e.Count)</span>
+            </span>
+            <span class="position-absolute h-100 bg-primary opacity-10 corner-tl animate-grow-x" style="width: @getPercentage(e)%"></span>
+        </a>
+    }
+</div>

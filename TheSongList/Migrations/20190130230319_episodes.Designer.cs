@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheSongList.Services;
 
 namespace TheSongList.Migrations
 {
     [DbContext(typeof(SongContext))]
-    partial class SongContextModelSnapshot : ModelSnapshot
+    [Migration("20190130230319_episodes")]
+    partial class episodes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,19 +49,11 @@ namespace TheSongList.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AirDate");
-
-                    b.Property<string>("Director");
-
                     b.Property<int>("EpisodeNumber");
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("ProdCode");
-
                     b.Property<int>("SeasonId");
-
-                    b.Property<string>("Writer");
 
                     b.HasKey("Id");
 
@@ -89,8 +83,6 @@ namespace TheSongList.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AirTime");
 
                     b.Property<string>("Name")
                         .IsRequired();
