@@ -42,6 +42,7 @@ namespace TheSongList.Controllers
             }
 
             var season = await _context.Seasons
+                .Include(s => s.Episodes)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (season == null)
             {

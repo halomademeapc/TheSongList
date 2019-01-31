@@ -4,33 +4,40 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Season</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.AirTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AirTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.SortOrder)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SortOrder)
-        </dd>
-    </dl>
+<div class="jumbotron bg-dark text-light">
+    <h1 class="display-3">Season @Html.DisplayFor(m => m.Name)</h1>
+    @if (!string.IsNullOrEmpty(Model.AirTime))
+    {
+        <h6>Originally Aired @Html.DisplayFor(m => m.AirTime)</h6>
+    }
+    <div class="mt-5">
+        <a class="btn btn-sm btn-outline-light" asp-action="Index">
+            <i class="fas fa-chevron-left mr-1"></i>
+            Back to List
+        </a>
+        <a class="btn btn-sm btn-outline-light" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fas fa-edit mr-1"></i>
+            Edit
+        </a>
+        <a class="btn btn-sm btn-outline-light" asp-action="Delete" asp-route-id="@Model.Id">
+            <i class="fas fa-trash mr-1"></i>
+            Delete
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<h5 class="mt-4 mb-2 d-flex flex-row justify-content-between">Episodes - @Model.Episodes.Count()</h5>
+<div class="list-group">
+    @foreach (var e in Model.Episodes.OrderBy(e => e.EpisodeNumber))
+    {
+        <a asp-controller="Episodes" asp-action="Details" asp-route-id="@e.Id" class="list-group-item list-group-item-action">
+            <small class="text-muted">
+                <span>S@(e.Season.Name)</span>
+                <span>E@(e.EpisodeNumber)</span>
+            </small>
+            @if (!string.IsNullOrEmpty(e.Name))
+            {
+                <span class="ml-2">@e.Name</span>
+            }
+        </a>
+    }
 </div>
