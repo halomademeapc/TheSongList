@@ -9,15 +9,20 @@
 <div class="list-group">
     @foreach (var e in Model.OrderBy(e => e.Season.SortOrder).ThenBy(e => e.EpisodeNumber))
     {
-        <a asp-controller="Episodes" asp-action="Details" asp-route-id="@e.Id" class="list-group-item list-group-item-action">
-            <small class="text-muted">
-                <span>S@(e.Season.Name)</span>
-                <span>E@(e.EpisodeNumber)</span>
-            </small>
-            @if (!string.IsNullOrEmpty(e.Name))
-            {
-                <span class="ml-2">@e.Name</span>
-            }
-        </a>
+        <div class="d-flex flex-row align-items-center">
+            <a asp-controller="Episodes" asp-action="Details" asp-route-id="@e.Id" class="list-group-item list-group-item-action">
+                <small class="text-muted">
+                    <span>S@(e.Season.Name)</span>
+                    <span>E@(e.EpisodeNumber)</span>
+                </small>
+                @if (!string.IsNullOrEmpty(e.Name))
+                {
+                    <span class="ml-2">@e.Name</span>
+                }
+            </a>
+            <a asp-controller="Appearances" asp-action="Delete" asp-route-episodeId="@e.Id" asp-route-songId="@ViewBag.SongId" class="btn btn-sm btn-outline-secondary ml-2">
+                <i class="fas fa-trash py-2 px-1"></i>
+            </a>
+        </div>
     }
 </div>
