@@ -4,58 +4,44 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Episode</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.EpisodeNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.EpisodeNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Director)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Director)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Writer)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Writer)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.AirDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AirDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProdCode)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProdCode)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Season)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Season.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="jumbotron bg-dark text-light">
+    <span class="h3 mb-0">
+        <a asp-controller="Seasons" class="text-white" asp-action="Details" asp-route-id="@Model.SeasonId">Season @Model.Season.Name</a>,
+        <span>Episode @Model.EpisodeNumber</span>
+    </span>
+    @if (!string.IsNullOrEmpty(Model.Name))
+    {
+        <h1 class="display-3">@Html.DisplayFor(m => m.Name)</h1>
+    }
+    @if (!string.IsNullOrEmpty(Model.AirDate))
+    {
+        <h6>Originally Aired @Html.DisplayFor(m => m.AirDate)</h6>
+    }
+    @if (!string.IsNullOrEmpty(Model.Director))
+    {
+        <div>@Html.DisplayNameFor(m => m.Director) @Html.DisplayFor(m => m.Director)</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Writer))
+    {
+        <div>@Html.DisplayNameFor(m => m.Writer) @Html.DisplayFor(m => m.Writer)</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ProdCode))
+    {
+        <small class="text-uppercase">@Html.DisplayNameFor(m => m.ProdCode) @Html.DisplayFor(m => m.ProdCode)</small>
+    }
+    <div class="mt-5">
+        <a class="btn btn-sm btn-outline-light" asp-action="Index">
+            <i class="fas fa-chevron-left mr-1"></i>
+            Back to List
+        </a>
+        <a class="btn btn-sm btn-outline-light" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fas fa-edit mr-1"></i>
+            Edit
+        </a>
+        <a class="btn btn-sm btn-outline-light" asp-action="Delete" asp-route-id="@Model.Id">
+            <i class="fas fa-trash mr-1"></i>
+            Delete
+        </a>
+    </div>
 </div>
 <vc:related-songs episode-id="@Model.Id"></vc:related-songs>
