@@ -21,14 +21,18 @@
             @Html.DisplayNameFor(model => model.Episode)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Episode.Id)
+            @($"S{Model.Episode.Season.Name} E{Model.Episode.EpisodeNumber}")
+            @if (!string.IsNullOrEmpty(Model.Episode.Name))
+            {
+                <span>@Model.Episode.Name</span>
+            }
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="EpisodeId" />
         <input type="hidden" asp-for="SongId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <a href="javascript:history.back()" class="btn btn-light">Cancel</a>
+        <input type="submit" value="Delete" class="btn btn-danger" />
     </form>
 </div>
