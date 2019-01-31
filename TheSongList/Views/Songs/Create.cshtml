@@ -39,5 +39,14 @@
 </div>
 
 @section Scripts {
+    <script>
+        $.fn.selectpicker.Constructor.DEFAULTS.liveSearch = true;
+
+        $(document).ready(function () {
+            $('#@Html.IdFor(m => m.ArtistId)').selectpicker();
+            $('#@Html.IdFor(m => m.EraId)').selectpicker();
+        });
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
