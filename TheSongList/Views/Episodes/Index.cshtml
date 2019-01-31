@@ -1,71 +1,38 @@
-﻿@model IEnumerable<TheSongList.Models.Entities.Episode>
+﻿@model IEnumerable<SumPair<Episode>>
 
 @{
     ViewData["Title"] = "Index";
+    var maxSongs = Model.Max(p => p.Count);
+    float getPercentage(SumPair<Episode> i) => maxSongs > 0 ? (float)i.Count * 100 / maxSongs : 0;
+
+    var seasons = Model.Select(p => p.Item.Season).Distinct();
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Episodes</h2>
+    <a class="btn btn-outline-primary my-3" asp-action="Create">
+        <i class="fas fa-plus mr-2"></i>
+        Create New
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EpisodeNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Director)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Writer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AirDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Season)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EpisodeNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Director)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Writer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AirDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Season.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@foreach (var s in seasons)
+{
+    <h5 class="mt-4 mb-2">Season @s.Name</h5>
+    <div class="list-group">
+        @foreach (var e in Model.Where(p => p.Item.Season == s))
+        {
+            <a asp-action="Details" asp-route-id="@e.Item.Id" class="list-group-item list-group-item-action position-relative">
+                <small class="text-muted">
+                    <span>S@(e.Item.Season.Name)</span>
+                    <span>E@(e.Item.EpisodeNumber)</span>
+                </small>
+                <span class="ml-2">
+                    @Html.DisplayFor(modelItem => e.Item.Name)
+                    <span class="badge badge-pill badge-primary ml-1">@Html.DisplayFor(modelItem => e.Count)</span>
+                </span>
+                <span class="position-absolute h-100 bg-primary opacity-10 corner-tl animate-grow-x" style="width: @getPercentage(e)%"></span>
+            </a>
+        }
+    </div>
 }
-    </tbody>
-</table>
