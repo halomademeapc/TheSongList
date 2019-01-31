@@ -34,7 +34,7 @@ namespace TheSongList.Controllers
         [HttpPost]
         [Authorize(Policy = "CanEdit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EpisodeId,SongId")] Appearance appearance)
+        public async Task<IActionResult> Create(Appearance appearance, [FromForm] bool IsEpisode)
         {
             if (ModelState.IsValid)
             {
@@ -43,7 +43,10 @@ namespace TheSongList.Controllers
                     _context.Add(appearance);
                     await _context.SaveChangesAsync();
                 }
-                return RedirectToAction("Details", "Songs", new { id = appearance.SongId });
+                if (!IsEpisode)
+                    return RedirectToAction("Details", "Songs", new { id = appearance.SongId });
+                else
+                    return RedirectToAction("Details", "Episodes", new { id = appearance.EpisodeId });
             }
             ViewData["EpisodeId"] = new SelectList(GetEpisodes(), "Id", "Name", appearance.EpisodeId);
             ViewData["SongId"] = new SelectList(GetSongs(), "Id", "Name", appearance.SongId);

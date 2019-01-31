@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Add Appearance";
+    var IsEpisode = string.IsNullOrEmpty(Context.Request.Query["episode"].ToString()) ? false : true;
 }
 
 <h4>Add Appearance</h4>
@@ -23,6 +24,7 @@
             </div>
         </div>
     </div>
+    @Html.HiddenFor(m => IsEpisode)
     <div class="form-group">
         <a href="javascript:history.back()" class="btn btn-light">Cancel</a>
         <input type="submit" value="Create" class="btn btn-primary" />
